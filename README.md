@@ -97,7 +97,20 @@ Type `/prompts` to see the full list, `/help` for commands, and `/quit` to exit.
 
 This section sends your questions to a real AI model in your Microsoft Foundry project. Complete **Section 1, Steps 1 to 3** first, so the code and VS Code are ready.
 
-### Step 1. Install the packages
+### Step 1. Create a Foundry project and deploy a model (skip if you already have one)
+
+You need a project and a chat model. Ask your admin if you are unsure whether one exists.
+
+1. Sign in to https://ai.azure.com with your Azure account.
+2. Make sure the **New Foundry** toggle is on. These steps refer to **Foundry (new)**.
+3. If you have no project yet, select **Create a new project** from the project menu in the upper-left corner. Enter a name such as `my-foundry-project`, then select **Create project**. Wait until the project overview page appears.
+4. Select **Build** in the upper-right navigation, then **Models** in the left pane.
+5. Select **Deploy** > **Deploy a base model**, search for `gpt-5-mini`, then select **Deploy** > **Default settings**.
+6. Note the deployment name (for example, `gpt-5-mini`). You need it in Step 4.
+
+> **Note:** you need a role that can create resources, such as **Foundry Owner**, or your admin must set up the project for you. The Microsoft Learn page at https://learn.microsoft.com/azure/foundry/tutorials/quickstart-create-foundry-resources has the Azure CLI version of these steps.
+
+### Step 2. Install the packages
 
 In the terminal (in the `TIcket_Tool_Demo` folder), run:
 
@@ -107,7 +120,7 @@ python -m pip install -r requirements.txt
 
 Wait until it finishes. This can take a minute.
 
-### Step 2. Sign in to Azure
+### Step 3. Sign in to Azure
 
 1. Install the Azure CLI from https://learn.microsoft.com/cli/azure/install-azure-cli
 2. Run:
@@ -116,13 +129,13 @@ Wait until it finishes. This can take a minute.
    ```
 3. Your account needs the **Foundry User** role on the project. Ask your admin if you are not sure.
 
-### Step 3. Copy two values from the Foundry portal
+### Step 4. Copy two values from the Foundry portal
 
 1. Open https://ai.azure.com and open your project.
-2. **Project endpoint:** on the project **Overview** page, copy the value that starts with `https://` and contains `/api/projects/`.
-3. **Deployment name:** open **Models + endpoints** and copy the name of your chat model, for example `gpt-4.1-mini`.
+2. **Project endpoint:** on the project welcome screen, copy the value that starts with `https://` and contains `/api/projects/`.
+3. **Deployment name:** the name you noted in Step 1, for example `gpt-5-mini`.
 
-### Step 4. Set the two values in the terminal
+### Step 5. Set the two values in the terminal
 
 On Windows (PowerShell), replace the placeholders with your values:
 
@@ -140,7 +153,7 @@ export MODEL_DEPLOYMENT_NAME="<your-deployment-name>"
 
 These values last only for this terminal window. Set them again if you open a new one.
 
-### Step 5. Run the live example
+### Step 6. Run the live example
 
 ```
 python foundry_demo.py
@@ -148,7 +161,7 @@ python foundry_demo.py
 
 The script creates a temporary agent, runs prompts A to E, prints every tool call, and deletes the agent at the end.
 
-### Step 6. Chat with the Foundry agent
+### Step 7. Chat with the Foundry agent
 
 ```
 python chat_demo.py --live
@@ -169,7 +182,6 @@ Questions about the Sev 2 playbook need the playbook in a vector store. Without 
    ```
 
 ---
-
 ## How to tell which one you're talking to
 
 | What you see | Meaning |
@@ -195,7 +207,7 @@ Open `demo_examples.md`. It lists 22 prompts in six groups, with the route the a
 | What you see | What to do |
 |---|---|
 | `python` is not recognised | Install Python and tick **Add python.exe to PATH**. Close and reopen VS Code. |
-| `Set PROJECT_ENDPOINT and MODEL_DEPLOYMENT_NAME` | You are in a new terminal. Set both values again (Section 2, Step 4). |
+| `Set PROJECT_ENDPOINT and MODEL_DEPLOYMENT_NAME` | You are in a new terminal. Set both values again (Section 2, Step 5). |
 | `ModuleNotFoundError` | Run `python -m pip install -r requirements.txt` in the same terminal. |
 | Authentication or 401 or 403 errors | Run `az login` again. Check that you have the Foundry User role on the project. |
 | `.\.venv\Scripts\Activate.ps1` is blocked | Run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, then try again. |
