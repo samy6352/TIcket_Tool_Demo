@@ -57,20 +57,7 @@ Either:
 
 Choose **Terminal > New Terminal**. The terminal opens at the bottom of the window, already in the `TIcket_Tool_Demo` folder.
 
-### Step 4. Run the first example
-
-Type this and press **Enter**:
-
-```
-python offline_rehearsal.py
-```
-
-You will see five results labelled A to E. Each one shows:
-
-- **Route chosen:** whether the agent used the document (KNOWLEDGE), the tool (TOOL), both, or stopped (PAUSE).
-- **Retrieval or tool call:** where the answer came from.
-
-### Step 5. Chat with the offline tool
+### Step 4. Chat with the offline tool
 
 Type this and press **Enter**:
 
@@ -153,15 +140,7 @@ export MODEL_DEPLOYMENT_NAME="<your-deployment-name>"
 
 These values last only for this terminal window. Set them again if you open a new one.
 
-### Step 6. Run the live example
-
-```
-python foundry_demo.py
-```
-
-The script creates a temporary agent, runs prompts A to E, prints every tool call, and deletes the agent at the end.
-
-### Step 7. Chat with the Foundry agent
+### Step 6. Chat with the Foundry agent
 
 ```
 python chat_demo.py --live
