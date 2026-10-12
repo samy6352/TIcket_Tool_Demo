@@ -177,6 +177,21 @@ Prompts A to D need the playbook in a vector store, otherwise the agent says it 
 
 Open `demo_examples.md`. It lists 22 prompts in six groups, with the route the agent should choose and what to point out for each one. Ask the room to guess the route before you press Enter.
 
+### Showing whether you are talking to local rules or Foundry
+
+The prompt tells you which one is answering:
+
+- `You [LOCAL]>` means the fixed rules on your computer. Nothing is sent over the network.
+- `You [FOUNDRY]>` means the model in your Foundry project.
+
+Other ways to show the difference:
+
+- **Start-up banner:** live mode prints the project host, model and agent name before the first question.
+- **`/where` command:** shows the current mode and where answers come from.
+- **Response IDs:** each Foundry answer prints a `response id` and `conversation id`. Local answers have none.
+- **Turn off the internet:** local mode still works with Wi-Fi off. Live mode fails with a connection error. This is a quick way to prove where the answer comes from.
+
+
 ---
 
 ## Troubleshooting

@@ -17,6 +17,7 @@ Optional VECTOR_STORE_ID enables playbook citations for prompts A and C.
 import json
 import os
 import sys
+from urllib.parse import urlparse
 
 from offline_rehearsal import PROMPTS, extract_ticket, retrieve, route
 from ticket_tool import FUNCTION_SCHEMA, run_tool_call
@@ -86,7 +87,14 @@ class LiveSession:
             definition=PromptAgentDefinition(model=model, instructions=INSTRUCTIONS, tools=build_tools()),
         )
         self.agent_ref = {"agent_reference": {"name": self.agent.name, "type": "agent_reference"}}
-        print(f"Live agent ready: {self.agent.name} version {self.agent.version}")
+        self.host = urlparse(endpoint).netloc
+        self.model = model
+        print("=" * 60)
+        print("CONNECTED TO MICROSOFT FOUNDRY")
+        print(f"  project host : {self.host}")
+        print(f"  model        : {model}")
+        print(f"  agent        : {self.agent.name} (version {self.agent.version})")
+        print("=" * 60)
         self.reset()
 
     def reset(self):
@@ -113,6 +121,8 @@ class LiveSession:
             response = self.openai.responses.create(
                 input=outputs, conversation=self.conversation_id, extra_body=self.agent_ref
             )
+        print(f"  [foundry] response id={response.id}")
+        print(f"  [foundry] conversation id={self.conversation_id}")
         return response.output_text
 
     def close(self):
@@ -122,10 +132,10 @@ class LiveSession:
 
 def answer(question, session):
     if session:
-        print("  [mode] live Foundry model")
+        print("  [mode] FOUNDRY: this answer came from the model in your Foundry project")
         text = session.ask(question)
     else:
-        print("  [mode] rehearsal (deterministic routing, not the model)")
+        print("  [mode] LOCAL: fixed rules on this computer, no network call, not the model")
         trace, text = rehearsal_turn(question)
         for line in trace:
             print(f"  {line}")
@@ -141,7 +151,7 @@ def run_script(session):
 
 
 def print_help():
-    print("Commands: /script, /prompts, /reset (live), /help, /quit")
+    print("Commands: /script, /prompts, /reset (live), /where, /help, /quit")
     print("Anything else is sent to the assistant.")
 
 
@@ -153,15 +163,16 @@ def main():
     live = "--live" in sys.argv[1:]
     print("=" * 60)
     print("Service Desk Helper: Building agents with tools and knowledge")
-    print("Mode: " + ("LIVE (Microsoft Foundry)" if live else "REHEARSAL (offline)"))
+    print("Mode: " + ("FOUNDRY (live model)" if live else "LOCAL (rehearsal, offline)"))
     print("Synthetic data only. Type /help for commands.")
     print("=" * 60)
 
     session = LiveSession() if live else None
     try:
         while True:
+            mode = "FOUNDRY" if session else "LOCAL"
             try:
-                text = input("\nYou> ").strip()
+                text = input("\nYou [" + mode + "]> ").strip()
             except (EOFError, KeyboardInterrupt):
                 break
             if not text:
@@ -170,6 +181,11 @@ def main():
                 break
             if text == "/help":
                 print_help()
+            elif text == "/where":
+                if session:
+                    print(f"  FOUNDRY via {session.host}, model {session.model}, agent {session.agent.name}")
+                else:
+                    print("  LOCAL: offline_rehearsal.py rules. Nothing is sent over the network.")
             elif text == "/prompts":
                 for label, question in PROMPTS.items():
                     print(f"  {label}. {question}")
