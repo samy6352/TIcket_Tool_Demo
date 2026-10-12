@@ -203,9 +203,7 @@ Open `demo_examples.md`. It lists 22 prompts in six groups, with the route the a
 | `demo_examples.md` | The 22 prompts to run during the demo, with the expected result for each. |
 | `ticket_tool.py` | The fake ticket lookup tool. It only reads. |
 | `knowledge/sev2-playbook.md` | A made-up support playbook that the agent can search. |
-| `offline_rehearsal.py` | Section 1. Runs a fixed set of prompts with no Azure needed. |
 | `chat_demo.py` | Section 1 by default (offline chat). Section 2 with `--live`. |
-| `foundry_demo.py` | Section 2. Runs the prompts against a real agent in Microsoft Foundry. |
 | `requirements.txt` | The Python packages needed for Section 2. |
 
 ---
